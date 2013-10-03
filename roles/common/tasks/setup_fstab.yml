@@ -1,0 +1,8 @@
+---
+- name: added vbox mount to fstab
+  sudo: true
+  lineinfile: dest=/etc/fstab
+              regexp='^/opt/src'
+              line='/opt/src         /opt/src     vboxsf   rw,uid=1000,gid=100         0   0'
+              state='present'
+  tags: vagrant

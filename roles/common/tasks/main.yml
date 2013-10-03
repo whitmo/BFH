@@ -1,0 +1,5 @@
+- include: add_ssh_key.yml 
+- include: apt-upgrade.yml
+- include: setup_fstab.yml
+- include: install_basic_unix.yml
+- include: setup_folders.yml

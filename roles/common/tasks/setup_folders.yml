@@ -1,0 +1,13 @@
+- name: setup the opt folder
+  sudo: true
+  file: path=/opt
+        owner={{user}}
+        group={{group}}
+        state=directory
+
+- name: create the src folder
+  sudo: true
+  file: path=/opt/src
+        owner={{user}}
+        group={{group}}
+        state=directory

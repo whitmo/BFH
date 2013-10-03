@@ -1,0 +1,13 @@
+---
+- hosts: vagrant
+  user: vagrant
+  vars:
+    user: 'vagrant'
+    group: 'vagrant'
+    cmb_url: http://cmbdownloads.s3-website-us-west-1.amazonaws.com/2.2.36/cmb-distribution-2.2.36.tar.gz
+
+  roles:
+    - common
+    - cmb
+
+

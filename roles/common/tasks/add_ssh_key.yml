@@ -1,0 +1,9 @@
+---
+- name: setup the authorize key from the local user
+  authorized_key: user={{user}} key='$FILE(authorized_keys)' state=present
+
+- name: copy the ssh config over
+  copy: 
+    src='../../../files/ssh_config'
+    dest='/home/{{user}}/.ssh/config'
+    mode=600
