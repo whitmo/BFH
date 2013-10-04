@@ -1,0 +1,14 @@
+---
+- name: download elasticsearch deb
+  get_url: url=$els_url dest=/opt/src/elasticsearch.deb mode=0600
+
+- name: is elasticsearch installed?
+  sudo: true
+  register: elasticsearch_installed
+  shell: dpkg-query -W -f='${Status} ${Version}\n' elasticsearch
+  ignore_errors: True
+
+- name: install elasticsearch 
+  sudo: true
+  shell: dpkg -i elasticsearch.deb chdir=/opt/src/
+  when: elasticsearch_installed|failed
