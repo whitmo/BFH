@@ -3,3 +3,15 @@
 - include: setup_fstab.yml
 - include: install_basic_unix.yml
 - include: setup_folders.yml
+
+- name: add circus ppa
+  sudo: true
+  apt_repository: repo='ppa:roman-imankulov/circus'
+
+- name: install circus
+  sudo: true
+  apt: pkg=circus state=latest update_cache=yes
+
+- name: install chausette
+  sudo: true
+  apt: pkg=chausette state=latest update_cache=yes
