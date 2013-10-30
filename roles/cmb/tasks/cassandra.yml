@@ -8,12 +8,15 @@
   apt_key: url=http://debian.datastax.com/debian/repo_key state=present
 
 - name: create c* user
+  sudo: true
   user: name=cassandra state=present createhome=no
 
 - name: create run folder for pid
+  sudo: true
   file: path=/var/run/cassandra state=directory owner=cassandra
 
 - name: create log folder for pid
+  sudo: true
   file: path=/var/log/cassandra state=directory owner=cassandra
 
 - name: install c*

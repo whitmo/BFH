@@ -10,7 +10,6 @@ Vagrant.configure("2") do |config|
     config.vm.network :private_network, ip: "192.168.21.253"
     config.ssh.forward_agent = true
 
-
     # Share an additional folder to the guest VM. The first argument is the
     # folder on the host, second is the folder on the guest.
     config.vm.synced_folder "src/", "/opt/src", :nfs => use_nfs
