@@ -10,11 +10,11 @@
 
 - name: install circus
   sudo: true
-  apt: pkg=circus state=latest update_cache=yes
+  apt: pkg=circus state=present update_cache=yes
 
 - name: install chausette
   sudo: true
-  apt: pkg=python-chaussette state=latest update_cache=yes
+  apt: pkg=python-chaussette state=present update_cache=yes
 
 - name: configure circus
   sudo: true

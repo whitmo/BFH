@@ -1,0 +1,36 @@
+---
+- name: add datastax cassandra repo
+  sudo: true
+  apt_repository: repo='deb http://debian.datastax.com/community stable main' state=present
+
+- name: datastax key
+  sudo: true
+  apt_key: url=http://debian.datastax.com/debian/repo_key state=present
+
+- name: create c* user
+  user: name=cassandra state=present createhome=no
+
+- name: create run folder for pid
+  file: path=/var/run/cassandra state=directory owner=cassandra
+
+- name: create log folder for pid
+  file: path=/var/log/cassandra state=directory owner=cassandra
+
+- name: install c*
+  sudo: true
+  tags: packages
+  apt: pkg=$item state=latest update_cache=yes
+  with_items:
+    - python-cql
+    - openjdk-7-jre-headless
+    - cassandra
+
+- name: set c* global row cache
+  sudo: true
+  lineinfile: "line='row_cache_size_in_mb: 100'
+              dest=/etc/cassandra/cassandra.yaml
+              state=present 
+              regexp=^row_cache_size_in_mb"
+  notify: restart c*
+
+#    - dsc20

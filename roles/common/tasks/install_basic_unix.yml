@@ -2,7 +2,7 @@
 - name: Install the unix basics
   sudo: true
   tags: repos
-  apt: pkg=$item state=latest update_cache=yes
+  apt: pkg=$item state=present update_cache=yes
   with_items:
     - build-essential
     - tmux

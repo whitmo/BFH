@@ -1,0 +1,8 @@
+- name: restart c*
+  service: name=cassandra state=restarted
+
+- name: restart redis
+  service: name=redis-server state=restarted
+
+- name: restart circus
+  service: name=circus state=restarted

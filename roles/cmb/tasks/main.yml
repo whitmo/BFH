@@ -1,11 +1,5 @@
 ---
-- name: add datastax cassandra repo
-  sudo: true
-  apt_repository: repo='deb http://debian.datastax.com/community stable main' state=present
-
-- name: datastax key
-  sudo: true
-  apt_key: url=http://debian.datastax.com/debian/repo_key state=present
+- include: cassandra.yml
 
 - name: install CMB pre reqs
   sudo: true
@@ -13,10 +7,6 @@
   apt: pkg=$item state=latest update_cache=yes
   with_items:
     - redis-server
-    - openjdk-7-jre-headless
-    - python-cql
-    - dsc1.1
-    - cassandra
 
 - name: cmb_dir
   sudo: true
@@ -36,11 +26,24 @@
   when: cmb_not_installed
 
 - name: move cmb to opt
-  shell: mv /opt/src/cmb /opt/cmb
+  shell: cp -R /opt/src/cmb /opt/cmb
   when: cmb_not_installed
 
+- name: place c* test
+  copy: src=checkcmb.cql dest=/opt/cmb/checkcmb.cql
+
+- name: if schema installed?
+  shell: cassandra-cli -h localhost -f checkcmb.cql chdir=/opt/cmb
+  ignore_errors: true
+  register: schema_inst
+
+- name: place c* schema
+  copy: src=cass.schema dest=/opt/cmb/cass.schema
+  when: schema_inst.rc == 4
+
 - name: load c* schema
-  shell: cassandra-cli -h localhost -f cassandra_1.1.schema chdir=/opt/src/cmb
+  shell: cassandra-cli -h localhost -f cass.schema chdir=/opt/cmb
+  when: schema_inst.rc == 4
 
 - name: configure redis
   sudo: true
@@ -49,7 +52,9 @@
     - 'save 900 1'
     - 'save 300 10'
     - 'save 60 10000'
+  notify: restart redis
 
 - name: add proc to circus
   sudo: true
   copy: src=cmb.ini dest=/etc/circus/conf.d/cmb.ini
+  notify: restart circus
