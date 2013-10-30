@@ -18,11 +18,26 @@
     - dsc1.1
     - cassandra
 
+- name: cmb_dir
+  sudo: true
+  register: cmb_dir
+  stat: path=/opt/cmb
+  
+- name: cmb is installed?
+  set_fact: 
+    cmb_not_installed: cmb_dir.stat.isdir is undefined or cmb_dir.stat.isdir == false 
+    cmb_installed: cmb_dir.stat.isdir is defined and cmb_dir.stat.isdir == true 
+
 - name: Download cmb binary
   get_url: url=$cmb_url dest=/opt/src/cmb.tar.gz mode=0600
 
 - name: untar CMB
   shell: tar -xf /opt/src/cmb.tar.gz chdir=/opt/src
+  when: cmb_not_installed
+
+- name: move cmb to opt
+  shell: mv /opt/src/cmb /opt/cmb
+  when: cmb_not_installed
 
 - name: load c* schema
   shell: cassandra-cli -h localhost -f cassandra_1.1.schema chdir=/opt/src/cmb
@@ -35,3 +50,6 @@
     - 'save 300 10'
     - 'save 60 10000'
 
+- name: add proc to circus
+  sudo: true
+  copy: src=cmb.ini dest=/etc/circus/conf.d/cmb.ini

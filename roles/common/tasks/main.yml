@@ -14,4 +14,8 @@
 
 - name: install chausette
   sudo: true
-  apt: pkg=chausette state=latest update_cache=yes
+  apt: pkg=python-chaussette state=latest update_cache=yes
+
+- name: configure circus
+  sudo: true
+  copy: src=circusd.ini dest=/etc/circus/circusd.ini
