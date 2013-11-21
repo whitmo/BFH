@@ -1,14 +1,44 @@
 ---
-- name: download elasticsearch deb
-  get_url: url=$els_url dest=/opt/src/elasticsearch.deb mode=0600
-
 - name: is elasticsearch installed?
   sudo: true
   register: elasticsearch_installed
   shell: dpkg-query -W -f='${Status} ${Version}\n' elasticsearch
   ignore_errors: True
 
+- name: download elasticsearch deb
+  get_url: url=$els_url dest=/opt/src/elasticsearch.deb mode=0600
+  when: elasticsearch_installed|failed
+
 - name: install elasticsearch 
   sudo: true
   shell: dpkg -i elasticsearch.deb chdir=/opt/src/
   when: elasticsearch_installed|failed
+
+# - name: sqs plugin dl check
+#   sudo: true
+#   register: sqs_zip
+#   stat: path=/opt/src/river-amazonsqs.zip
+
+# - name: grab sqs river plugin
+#   get_url: url=https://s3-eu-west-1.amazonaws.com/albogdano/river-amazonsqs.zip dest=/opt/src mode=600
+#   when: sqs_zip.exists is undefined
+
+# - name: install sqs plugin
+#   sudo: true
+#   command: /usr/share/elasticsearch/bin/plugin -i river-amazonsqs -u file://opt/src/river-amazonsqs.zip
+#   register: install_sqs_plugin
+#   changed_when: "install_sqs_plugin.rc == 0"
+#   notify:
+#     - restart elasticsearch
+
+# - name: did river fail?
+#   fail: msg="sqs plugin failed to install"
+#   when: "install_sqs_plugin.rc != 0 or install_sqs_plugin.rc != 74"
+
+- name: elasticsearch place config
+  sudo: true
+  copy: src=elasticsearch.yml 
+        dest=/etc/elasticsearch/elasticsearch.yml
+        backup=yes
+  notify:
+    - restart elasticsearch

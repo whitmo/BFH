@@ -1,0 +1,20 @@
+---
+- name: add oracle java repo
+  sudo: true
+  tags: java
+  apt_repository: repo='ppa:webupd8team/java'
+
+- name: upgrade the system
+  sudo: true
+  apt: update_cache=yes
+
+- name: accept license
+  sudo: true
+  script: accept-license.sh
+
+- name: install java
+  sudo: true
+  tags: java
+  environment: 
+    DEBIAN_FRONTEND: noninteractive
+  apt: pkg=oracle-java7-installer state=latest 

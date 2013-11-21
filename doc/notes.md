@@ -4,14 +4,32 @@
 
 http://www.slideshare.net/DataStax/cassandra-community-webinar-cmb-an-open-message-bus-for-the-cloud
 
+
 ## ES
 
 http://asquera.de/opensource/2012/11/25/elasticsearch-pre-flight-checklist/
+http://exploringelasticsearch.com/
+
+## add to ansible
+
+JAVA: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/_linux.html
+
+
+## Python drivers
+
+http://pyelasticsearch.readthedocs.org/en/latest/
+
+
+## SQS River
+
+https://github.com/albogdano/elasticsearch-river-amazonsqs
 
 
 ## ES vs. Solr
 
 http://blog.sematext.com/2012/08/23/solr-vs-elasticsearch-part-1-overview/
+
+
 
 
 ## boto -> CMB

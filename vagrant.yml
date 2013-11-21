@@ -9,6 +9,6 @@
 
   roles:
     - common
-    - cmb
+    #- cmb
     - elasticsearch
 

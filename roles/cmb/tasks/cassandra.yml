@@ -22,10 +22,9 @@
 - name: install c*
   sudo: true
   tags: packages
-  apt: pkg=$item state=latest update_cache=yes
+  apt: pkg=$item state=present update_cache=yes
   with_items:
     - python-cql
-    - openjdk-7-jre-headless
     - cassandra
 
 - name: set c* global row cache
